@@ -1,3 +1,13 @@
+2.4Ghz JAMMER CIRCUIT
+
+A DIY educational project that explores the fundamentals of RF interference by building a jammer targeting the 2.4 GHz ISM band — home to Wi-Fi, Bluetooth, and other short-range communication protocols.
+
+> ⚠️ **For Educational Purposes Only**  
+> This project is strictly meant for academic and research exploration. Unauthorized usage of signal jammers is illegal in many countries. Always follow your local laws and regulations.
+
+---
+
+
 🔧 ESP32 + NRF24L01 Dual Setup (HSPI & VSPI)
 ESP32 has two usable SPI interfaces:
 
