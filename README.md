@@ -2,117 +2,80 @@
 
 A DIY educational project that explores the fundamentals of RF interference by building a jammer targeting the 2.4 GHz ISM band — home to Wi-Fi, Bluetooth, and other short-range communication protocols.
 
-> ⚠️ **For Educational Purposes Only**  
-> This project is strictly meant for academic and research exploration. Unauthorized usage of signal jammers is illegal in many countries. Always follow your local laws and regulations.
+# 2.4GHz Jammer Circuit using Dual NRF24L01 Modules and ESP32-WROOM-32E
+
+This project builds a basic 2.4GHz jammer using **two NRF24L01+ modules** connected to an **ESP32-WROOM-32E**. The setup allows parallel transmission on multiple RF channels to flood the 2.4GHz spectrum with interference packets.
+
+> ⚠️ DISCLAIMER: This project is for **educational and research purposes only**. Jamming RF signals without permission is illegal in most countries. Use only in controlled environments.
 
 ---
 
+## Components Used
 
-🔧 ESP32 + NRF24L01 Dual Setup (HSPI & VSPI)
-ESP32 has two usable SPI interfaces:
+- ESP32-WROOM-32E
+- 2 × NRF24L01+ modules
+- Logic-level shifter or voltage regulator (for stable 3.3V to NRF24L01)
+- 2 × 10µF capacitors (for power stability)
+- Breadboard or custom PCB
+- Jumper wires
 
-HSPI (Hardware SPI)
+---
 
-VSPI (Default SPI)
+## Wiring (Dual NRF24L01 Modules)
 
-Both modules are NRF24L01, a 2.4 GHz transceiver used for wireless communication—not jamming.
+| NRF24L01 #1 | ESP32 Pin |
+|-------------|-----------|
+| VCC         | 3.3V      |
+| GND         | GND       |
+| CE          | GPIO 4    |
+| CSN         | GPIO 5    |
+| SCK         | GPIO 18   |
+| MOSI        | GPIO 23   |
+| MISO        | GPIO 19   |
 
-🧠 How It Works:
-ESP32 is the central controller.
+| NRF24L01 #2 | ESP32 Pin |
+|-------------|-----------|
+| VCC         | 3.3V      |
+| GND         | GND       |
+| CE          | GPIO 16   |
+| CSN         | GPIO 17   |
+| SCK         | GPIO 18 (shared) |
+| MOSI        | GPIO 23 (shared) |
+| MISO        | GPIO 19 (shared) |
 
-Two NRF24L01 modules are connected:
+Each NRF24L01 must have its own `CE` and `CSN` lines. SPI pins (SCK, MOSI, MISO) are shared between both modules.
 
-One to HSPI pins.
+---
 
-One to VSPI pins.
+## Setup Instructions
 
-The ESP32 can send/receive data from both modules independently, potentially acting like a relay, monitor, or signal bridge.
+1. Install Arduino IDE or PlatformIO.
+2. Install ESP32 board definitions.
+3. Install the RF24 library (TMRh20 version).
+4. Modify the code to initialize two RF24 objects with separate CE/CSN pins.
+5. Upload the sketch to the ESP32-WROOM-32E.
 
-🧵 Pin Mapping (from your image):
-NRF24L01 Pin	Function	HSPI (left)	VSPI (right)
-GND	Ground	GND	GND
-VCC	Power	3.3V	3.3V
-CE	Chip Enable	GPIO 4	GPIO 17
-CSN (CS)	SPI Select	GPIO 5	GPIO 16
-SCK	Clock	GPIO 14	GPIO 18
-MOSI	Master Out	GPIO 13	GPIO 23
-MISO	Master In	GPIO 12	GPIO 19
-IRQ	Not used	(optional)	(optional)
+---
 
-⚙️ Use Cases This Could Support (Legally):
-📡 Wireless bridge (e.g., forwarding data from one NRF node to another)
+## How It Works
 
-📊 Data logger with multiple sensor clusters
+Each NRF24L01 module is initialized separately and cycles through its own set of RF channels. By using two modules simultaneously, the ESP32 can transmit interference on different frequency segments in parallel, increasing the coverage and reducing latency between channel hops.
 
-📶 Signal interference monitor (NOT jamming)
+---
 
-🔄 Bluetooth-to-NRF gateway
+## Legal Notice
 
-🛠️ Libraries You Might Use in Arduino:
-RF24 for controlling NRF24L01
+Use this project only for educational testing in RF-isolated environments or with explicit permission. Unauthorized use of jamming devices is prohibited by law in many jurisdictions.
 
-SPI for communication
+---
 
-✅ Next Steps:
-If you're working on legal RF communication, I can give you full example code to:
+## License
 
-Set up both NRF24L01 modules on the ESP32.
+MIT License
 
-Transmit and receive data between them or with remote NRF nodes.
+---
 
-Let me know your intended use case (e.g., wireless messaging, sensor network, etc.), and I’ll write a working Arduino sketch for it.
+## Author
 
-
-
-
-
-
-
-You said:
-what does nrf24l01 does
-ChatGPT said:
-The nRF24L01 is a 2.4 GHz wireless transceiver module made by Nordic Semiconductor. It's commonly used for low-power, short-range wireless communication in DIY and embedded systems, especially with Arduino, ESP32, Raspberry Pi, and similar platforms.
-
-🔍 Key Features of nRF24L01:
-Feature	Details
-Frequency	2.4 GHz ISM band (same as WiFi, Bluetooth)
-Range	Up to 100 meters (line of sight, with PA+LNA versions)
-Data Rate	250 kbps, 1 Mbps, or 2 Mbps
-Power Usage	Very low power consumption (ideal for battery-powered devices)
-Communication Type	Half-duplex (can transmit or receive, but not both at the same time)
-SPI Interface	Connects to microcontrollers using SPI (Serial Peripheral Interface)
-Addressable Pipes	Supports up to 6 communication channels (pipes) with unique addresses
-Data Packet Size	Up to 32 bytes per packet
-
-📡 What It Can Do:
-Wireless Communication
-
-Between two microcontrollers (e.g., ESP32 ↔ Arduino)
-
-Between a controller and multiple nodes (star topology)
-
-Remote Control
-
-For RC cars, drones, or robotic arms
-
-Sensor Networks
-
-Wireless temperature, humidity, or motion sensor reporting
-
-Data Transmission
-
-Telemetry data in embedded systems or wearables
-
-🧠 How It Works:
-Uses SPI to talk to a microcontroller (like ESP32).
-
-You assign it an address.
-
-You can send and receive small data packets (max 32 bytes).
-
-You can configure roles:
-
-One as transmitter (TX)
-
-Another as receiver (RX)
-
+Created by: IMAYAVARAMBAN L
+Year: 2025
